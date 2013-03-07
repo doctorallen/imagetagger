@@ -9,8 +9,15 @@ $(document).on('ready', function(){
     if( downX != 0 && downY != 0){
       upX = e.pageX - $(this).offset().left;
       upY= e.pageY - $(this).offset().top;
-      $('#cur_box_' + count).css('height', Math.abs(downY - upY));
-      $('#cur_box_' + count).css('width', Math.abs(downX - upX));
+      var box = $('#cur_box_' + count);
+      if( upX < downX  ){
+        box.css('left', upX);
+      }
+      if( upY < downY ){
+        box.css('top', upY);
+      }
+      box.css('height', Math.abs(downY - upY));
+      box.css('width', Math.abs(downX - upX));
     }
   });
   $('.canvas img').mousedown(function(e){
@@ -25,6 +32,18 @@ $(document).on('ready', function(){
       e.preventDefault();
       var boxID = 'cur_box_' + count;
       var unitType = $('.units').val();
+      //if the user drew the box from right to left, swap the coordinates
+      if( upX < downX ){
+        var temp = downX;
+        downX = upX;
+        upX = temp;
+      }
+      //if the user drew the box from bottom to top, swap the coordinates
+      if( upY < downY ){
+        var temp = downY;
+        downY = upY;
+        upY = temp;
+      }
       var point = {
         downX: downX,
         downY: downY,
@@ -35,7 +54,7 @@ $(document).on('ready', function(){
       points[boxID] = point;
       console.log(points);
       generate_background();
-      $('.list').append('<li class="'+ boxID +'"><a class="list-item">' + unitType + '</a></li>'); 
+      $('.list').append('<li class="'+ boxID +'"><a class="list-item">' + unitType + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
 
         
       count = count + 1;
@@ -43,10 +62,23 @@ $(document).on('ready', function(){
   $(document).on('mouseenter', '.list-item', function(){
       $('.box').removeClass('active');
       $('#' + $(this).parent().attr('class')).addClass('active');
+      console.log($(this));
+      $(this).parent().find('ul').show();
+  });
+  $(document).on('mouseenter', '.box', function(){
+      $('.box').removeClass('active');
+      $(this).addClass('active');
+  });
+  $(document).on('mouseout', '.box', function(){
+      $('.box').removeClass('active');
   });
   $(document).on('mouseout', '.list-item', function(){
       $('.box').removeClass('active');
+      $(this).parent().find('ul').hide();
   });
+  $('.done-btn').click( function (){
+    $('.box').addClass('box-done');
+      });
  function generate_background(){
     //$('.box').hide();
     var units = $('.units');
@@ -54,7 +86,7 @@ $(document).on('ready', function(){
         var box = $(this);
         box.show();
         var point = points[box.attr('id')];
-        var url = 'url(skywatcher.jpg) no-repeat -' + point.downX + 'px -' + point.downY + 'px';
+        var url = 'url(generals2.jpg) no-repeat -' + point.downX + 'px -' + point.downY + 'px';
         console.log(box);
         console.log(url);
         box.css({background: url, border: 'none'});
@@ -66,7 +98,7 @@ $(document).on('ready', function(){
         var box = $(this);
         box.show();
         var point = points[box.attr('id')];
-        var url = 'url(skywatcher.jpg) no-repeat -' + point.downX + 'px -' + point.downY + 'px';
+        var url = 'url(generals2.jpg) no-repeat -' + point.downX + 'px -' + point.downY + 'px';
         console.log(box);
         console.log(url);
         box.css({background: url});

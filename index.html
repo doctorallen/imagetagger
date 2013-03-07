@@ -26,24 +26,31 @@
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
+.box-done{
+  pointer-events: all;
+}
 .list-item{
   cursor: pointer;
 }
 .active{
       box-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
+.sub-item{
+  display: none;
+}
   </style>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script type="text/javascript" src="tagger.js"></script>
 </head>
 <body>
+<button class="done-btn">Done</button>
 <span>Add new tag</span><br />
 <select class="units">
   <option>Helicopter</option>
   <option>Tank</option>
 </select>
 <div class="canvas">
-  <img src="skywatcher.jpg">
+  <img src="generals2.jpg">
 </div>
 <div >
   <ul class="list">
