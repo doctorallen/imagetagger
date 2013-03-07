@@ -1,5 +1,5 @@
 $(document).on('ready', function(){
-  var points = {};
+  var points = [];
   var downX = 0;
   var downY = 0;
   var upX = 0;
@@ -53,7 +53,6 @@ $(document).on('ready', function(){
       };
       points[boxID] = point;
       console.log(points);
-      $('#points').val(points);
       generate_background();
       $('.list').append('<li class="'+ boxID +'"><a class="list-item">' + unitType + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
 
