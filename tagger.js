@@ -23,20 +23,29 @@ $(document).on('ready', function(){
   $('.canvas img').mouseup(function(e){
       console.log(count);
       e.preventDefault();
+      var boxID = 'cur_box_' + count;
+      var unitType = $('.units').val();
       var point = {
         downX: downX,
         downY: downY,
         upX: upX,
         upY: upY,
-        unit: $('.units').val()
+        unit: unitType
       };
-      points['cur_box_' + count] = point;
+      points[boxID] = point;
       console.log(points);
       generate_background();
-      $('.list').append('<li>cur_box_' + count + '</li>'); 
+      $('.list').append('<li class="'+ boxID +'"><a class="list-item">' + unitType + '</a></li>'); 
 
         
       count = count + 1;
+  });
+  $(document).on('mouseenter', '.list-item', function(){
+      $('.box').removeClass('active');
+      $('#' + $(this).parent().attr('class')).addClass('active');
+  });
+  $(document).on('mouseout', '.list-item', function(){
+      $('.box').removeClass('active');
   });
  function generate_background(){
     //$('.box').hide();
