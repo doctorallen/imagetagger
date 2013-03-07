@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="">
+  <style>
+  body{
+  margin: 30px;
+}
+    .canvas{
+        position: relative;
+        display:inline-block;
+        padding: 0px;
+        margin: 0px;
+    }
+  img{
+    margin: 0px;
+    opacity: 0.5;
+  }
+.units {
+}
+.box{
+      border: 2px solid rgba(255,255,255,0.5); 
+      position: absolute;
+      pointer-events: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+  </style>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="tagger.js"></script>
+</head>
+<body>
+<span>Add new tag</span><br />
+<select class="units">
+  <option>Helicopter</option>
+  <option>Tank</option>
+</select>
+<div class="canvas">
+  <img src="skywatcher.jpg">
+</div>
+<div >
+  <ul class="list">
+
+  </ul>
+
+</div>
+</body>
+</html>
