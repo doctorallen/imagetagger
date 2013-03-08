@@ -1,4 +1,14 @@
+/*
+ *  Author: David Allen
+ *  Website: http://davidrallen.com
+ *  Last Updated: 03/08/13
+ *
+ */
+
 $(document).on('ready', function(){
+/*******************************************
+ *          Variable Declaration
+ *******************************************/
   var points = {};
   var cur_tag = "";
   var done = false;
@@ -15,6 +25,11 @@ $(document).on('ready', function(){
   var upY = 0;
   var count = 0;
 
+/*******************************************
+ *          Mouse Functions
+ *******************************************/
+
+  //when the mouse is moving on the image, drag the tag container
   $('.canvas img').mousemove(function(e){
     if( downX != 0 && downY != 0 && done == false){
       upX = e.pageX - $(this).offset().left;
@@ -37,6 +52,8 @@ $(document).on('ready', function(){
       tag.css('background', url);
     }
   });
+
+  //when the user starts creating the tag
   $('.canvas img').mousedown(function(e){
       e.preventDefault();
       if( done == false ){
@@ -46,6 +63,8 @@ $(document).on('ready', function(){
         $('.canvas').append('<div id ="tag_' + count + '" class="tag ' + $('.units').val() + '" style="' + style +'"></div>');
       }
   });
+
+  //when the user finishes creating the tag
   $('.canvas img').mouseup(function(e){
       e.preventDefault();
       if( done == false ){
@@ -71,92 +90,81 @@ $(document).on('ready', function(){
           unit: unitType
         };
         points['tags'][tagID] = point;
-        console.log('points');
-        console.log(points);
-        console.log(JSON.stringify(points));
-        generate_background();
+        generate_tag( tagID, point );
         $('.list').append('<li class="'+ tagID +'"><a class="list-item">' + unitType + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
 
-          
         count = count + 1;
       }
   });
 
+  //when the mouse enters a list item, it will display 
+  //the detailed information
   $(document).on('mouseenter', '.list-item', function(){
       $('.tag').removeClass('active');
       $('#' + $(this).parent().attr('class')).addClass('active');
       $(this).parent().find('ul').show();
   });
 
+  //when the mouse enters a tag, it will become active
+  //and a close button will be added 
   $(document).on('mouseenter', '.tag', function(){
       $('.tag').removeClass('active');
       $(this).addClass('active');
       $(this).append('<div class="tag-close">X</div>');
       cur_tag = $(this).attr('id');
-      console.log(cur_tag);
   });
 
+  //when the mouse leaves a tag, it will no longer be active
+  //and the close button will disappear
   $(document).on('mouseleave', '.tag', function(){
       $('.tag').removeClass('active');
       $('.tag-close').remove();
       cur_tag = "";
-      console.log(cur_tag);
   });
 
+  //whcn the mouse leaves a list item, it will hide
   $(document).on('mouseleave', '.list-item', function(){
       $('.tag').removeClass('active');
       $(this).parent().find('ul').hide();
   });
 
+/*******************************************
+ *         Click Functions
+ *******************************************/
+
+  //check if the user is trying to finish their tags
   $('.done-btn').click( function (){
     $('.tag').addClass('tag-done');
     done = true;
   });
 
+  //check if the user is trying enter edit mode
   $('.edit-btn').click( function (){
     $('.tag').removeClass('tag-done');
     done = false;
   });
    
+  //check if the user is trying to delete a tag with the close button
   $(document).on('click', '.tag-close', function(){
     deleteTag( $(this).parent().attr('id') );
   });
 
+  //check if the user is trying to delete a tag with the keyboard
   $(document).keyup( function(e){
-    console.log(e.keyCode);
-    console.log(cur_tag);
     if ((e.keyCode == 68 && cur_tag != "") || (e.keyCode == 46 && cur_tag != "")){
       deleteTag( cur_tag );
       cur_tag = "";
     }
   });
 
-  function deleteTag( id ){
-    console.log('before delete:', JSON.stringify(points));
-    //remove the points from the object
-    delete points['tags'][id];
-    //remove the actual element
-    $('#' + id).remove();
-    regenerate();
-    regenerate_tags();
-    console.log('after delete:', JSON.stringify(points));
-    generate_list();
-  }
+  //display tags associated with a category
+  $(document).on('click', '.units', function() {
+      display_units( $(this).val() );
+  });
 
-  function regenerate(){
-    //tags may need to be regenerated when they are edited or deleted
-    //we need to make sure that the indexes and coiunt variables are correct
-    var tags = {};
-    var iterator = 0;
-    $('.tag').remove();
-    $.each(points['tags'], function( i, tag ){
-      //create a temporary tags object
-      tags['tag_' + iterator] = tag;
-      iterator = iterator + 1;
-    });
-    points['tags'] = tags;
-    count = iterator;
-  }
+/*******************************************
+ *         Tag Generating Functions
+ *******************************************/
 
   function regenerate_tags(){
     //tags may need to be regenerated when they are edited or deleted
@@ -165,8 +173,6 @@ $(document).on('ready', function(){
     $('.tag').remove();
     $.each(points['tags'], function( i, tag ){
       //create a temporary tags object
-      console.log('iterator:', iterator);
-      console.log('i:', i);
       var style = "background: url(" + points.image.src+ ") no-repeat -" + tag.downX + "px -" + tag.downY + "px; top:" + tag.downY + "px; left:" + tag.downX + "px; z-index:" + iterator + "; height:" + Math.abs(tag.downY - tag.upY) + "px; width:"+ Math.abs(tag.downX - tag.upX) + "px;";
       $('.canvas').append('<div id ="'+ i + '" class="tag tag-done ' + tag.unit + '" style="' + style +'"></div>');
       iterator = iterator + 1;
@@ -183,28 +189,50 @@ $(document).on('ready', function(){
 
   }
 
-  
-
- function generate_background(){
-    //$('.tag').hide();
-    var units = $('.units');
-    $('.' + units.val()).each(function(){
-        var tag = $(this);
-        tag.show();
-        var point = points['tags'][tag.attr('id')];
-        var url = 'url(' + $('.canvas img').attr('src') + ') no-repeat -' + point.downX + 'px -' + point.downY + 'px';
-        tag.css({background: url, border: 'none'});
-      });
+ function generate_tag( tagID, point ){
+    var unit = $('.units').val();
+    var url = 'url(' + $('.canvas img').attr('src') + ') no-repeat -' + point.downX + 'px -' + point.downY + 'px';
+    $('#' + tagID).css({background: url, border: 'none'});
  }
-  $(document).on('click', '.units', function() {
-        $('.tag').hide();
-    $('.' + $(this).val()).each(function(){
-        var tag = $(this);
-        tag.show();
-        var point = points['tags'][tag.attr('id')];
-        var url = 'url(' + $('.canvas img').attr('src') + ') no-repeat -' + point.downX + 'px -' + point.downY + 'px';
-        tag.css({background: url});
-      });
-  });
+
+/*******************************************
+ *         Tag Editing/Deletion Functions
+ *******************************************/
+
+  function deleteTag( id ){
+    //remove the points from the object
+    delete points['tags'][id];
+    //remove the actual element
+    $('#' + id).remove();
+    compact_tags();
+    regenerate_tags();
+    generate_list();
+  }
+
+  function compact_tags(){
+    //tags may need to be regenerated when they are edited or deleted
+    //we need to make sure that the indexes and coiunt variables are correct
+    var tags = {};
+    var iterator = 0;
+    $('.tag').remove();
+    $.each(points['tags'], function( i, tag ){
+      //create a temporary tags object
+      tags['tag_' + iterator] = tag;
+      iterator = iterator + 1;
+    });
+    points['tags'] = tags;
+    count = iterator;
+  }
+
+/*******************************************
+ *        Tag Displaying Functions 
+ *******************************************/
+
+ function display_units( unit ){
+   //hide all of the tags
+    $('.tag').hide();
+   //show only the units we want to see
+    $('.' + unit).show();
+ }
 
 });
