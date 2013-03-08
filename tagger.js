@@ -20,14 +20,21 @@ $(document).on('ready', function(){
       upX = e.pageX - $(this).offset().left;
       upY= e.pageY - $(this).offset().top;
       var tag = $('#tag_' + count);
+      var temp_downX = downX;
+      var temp_downY = downY;
       if( upX < downX  ){
         tag.css('left', upX);
+        temp_downX = upX;
       }
       if( upY < downY ){
         tag.css('top', upY);
+          temp_downY = upY;
       }
+
       tag.css('height', Math.abs(downY - upY));
       tag.css('width', Math.abs(downX - upX));
+      var url = "url(" + points.image.src+ ") no-repeat -" + temp_downX + "px -" + temp_downY + "px"
+      tag.css('background', url);
     }
   });
   $('.canvas img').mousedown(function(e){
