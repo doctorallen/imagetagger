@@ -24,6 +24,19 @@ $(document).on('ready', function(){
   var upX = 0;
   var upY = 0;
   var count = 0;
+  var categories = {
+    tank: "Tank",
+    helicopter: "Helicopter",
+    light_assult: "Light Assault"
+  };
+  
+  var menu = {
+    description: "Add Description",
+    category: "Change Category"
+  };
+  var edit_menu = generate_menu( menu );
+  generate_categories();
+  console.log(edit_menu);
 
 /*******************************************
  *          Mouse Functions
@@ -60,7 +73,7 @@ $(document).on('ready', function(){
         downX = e.pageX - $(this).offset().left;
         downY= e.pageY - $(this).offset().top;
         var style = "top:" + downY + "px; left:" + downX + "px; z-index:" + count + ";";
-        $('.canvas').append('<div id ="tag_' + count + '" class="tag ' + $('.units').val() + '" style="' + style +'"></div>');
+        $('.canvas').append('<div id ="tag_' + count + '" class="tag ' + $('.category').val() + '" style="' + style +'"></div>');
       }
   });
 
@@ -69,7 +82,7 @@ $(document).on('ready', function(){
       e.preventDefault();
       if( done == false ){
         var tagID = 'tag_' + count;
-        var unitType = $('.units').val();
+        var category = $('.category').val();
         //if the user drew the tag from right to left, swap the coordinates
         if( upX < downX ){
           var temp = downX;
@@ -87,11 +100,11 @@ $(document).on('ready', function(){
           downY: downY,
           upX: upX,
           upY: upY,
-          unit: unitType
+          category: category
         };
         points['tags'][tagID] = point;
         generate_tag( tagID, point );
-        $('.list').append('<li class="'+ tagID +'"><a class="list-item">' + unitType + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
+        $('.list').append('<li class="'+ tagID +'"><a class="list-item">' + category + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
 
         count = count + 1;
       }
@@ -112,6 +125,7 @@ $(document).on('ready', function(){
       $(this).addClass('active');
       $(this).append('<div class="tag-close">X</div>');
       cur_tag = $(this).attr('id');
+      display_menu( $(this) );
   });
 
   //when the mouse leaves a tag, it will no longer be active
@@ -119,6 +133,7 @@ $(document).on('ready', function(){
   $(document).on('mouseleave', '.tag', function(){
       $('.tag').removeClass('active');
       $('.tag-close').remove();
+      remove_menu();
       cur_tag = "";
   });
 
@@ -158,8 +173,25 @@ $(document).on('ready', function(){
   });
 
   //display tags associated with a category
-  $(document).on('click', '.units', function() {
-      display_units( $(this).val() );
+  $(document).on('click', '.category', function() {
+      display_categories( $(this).val() );
+  });
+  
+  $(document).on('click', '.edit-menu li', function() {
+      var action = $(this).attr('id');;
+      var tagID = $(this).parent().parent().attr('id');
+      console.log(action);
+      console.log(tagID);
+      switch( action ){
+        case "description":
+          var description = prompt("Enter a description for this tag");
+          points['tags'][tagID].description = description;
+          console.log(points);
+        break;
+        case "category":
+        break;
+        default:
+      }
   });
 
 /*******************************************
@@ -174,7 +206,7 @@ $(document).on('ready', function(){
     $.each(points['tags'], function( i, tag ){
       //create a temporary tags object
       var style = "background: url(" + points.image.src+ ") no-repeat -" + tag.downX + "px -" + tag.downY + "px; top:" + tag.downY + "px; left:" + tag.downX + "px; z-index:" + iterator + "; height:" + Math.abs(tag.downY - tag.upY) + "px; width:"+ Math.abs(tag.downX - tag.upX) + "px;";
-      $('.canvas').append('<div id ="'+ i + '" class="tag tag-done ' + tag.unit + '" style="' + style +'"></div>');
+      $('.canvas').append('<div id ="'+ i + '" class="tag tag-done ' + tag.category + '" style="' + style +'"></div>');
       iterator = iterator + 1;
     });
   }
@@ -184,13 +216,13 @@ $(document).on('ready', function(){
     $('.list').html('');
     //loop through all the tags to build the list
     $.each(points['tags'], function( i, tag ){
-      $('.list').append('<li class="'+ i +'"><a class="list-item">' + tag.unit + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
+      $('.list').append('<li class="'+ i +'"><a class="list-item">' + tag.category + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
     });
 
   }
 
  function generate_tag( tagID, point ){
-    var unit = $('.units').val();
+    var category = $('.category').val();
     var url = 'url(' + $('.canvas img').attr('src') + ') no-repeat -' + point.downX + 'px -' + point.downY + 'px';
     $('#' + tagID).css({background: url, border: 'none'});
  }
@@ -224,15 +256,44 @@ $(document).on('ready', function(){
     count = iterator;
   }
 
+  function generate_menu( menu ){
+    var menu_items;
+    menu_items ='<ul class="edit-menu">';
+    $.each(menu, function( i, item){
+         menu_items += "<li id="+ i + ">" + item + "</li>"; 
+    });
+    menu_items += '</ul>';
+    return menu_items;
+  }
+
+/*******************************************
+ *        Menu Functions 
+ *******************************************/
+
+  function display_menu( tag ){
+    tag.append(edit_menu);
+  }
+
+  function remove_menu(){
+    $('.edit-menu').remove();
+  }
+
+  function generate_categories(){
+    $.each(categories, function( i, category ){
+       $('.category').append('<option value="' + i + '">' + category + '</option>');
+    });
+  }
+
+
 /*******************************************
  *        Tag Displaying Functions 
  *******************************************/
 
- function display_units( unit ){
+ function display_categories( category ){
    //hide all of the tags
     $('.tag').hide();
-   //show only the units we want to see
-    $('.' + unit).show();
+   //show only the category we want to see
+    $('.' + category).show();
  }
 
 });
