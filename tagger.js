@@ -104,6 +104,11 @@ $(document).on('ready', function(){
     done = true;
   });
 
+  $('.edit-btn').click( function (){
+    $('.tag').removeClass('tag-done');
+    done = false;
+  });
+
   $(document).keyup( function(e){
     console.log(e.keyCode);
     console.log(cur_tag);

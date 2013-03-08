@@ -4,6 +4,7 @@ $(document).on('ready', function(){
         console.log(points);
         $('.generate-btn').on('click', function(){
           generate_tags( points );
+          generate_list();
         });
 
         function generate_tags( points ){
@@ -14,6 +15,16 @@ $(document).on('ready', function(){
             $('.canvas').append('<div id ="'+ i + '" class="tag tag-done ' + tag.unit + '" style="' + style +'"></div>');
             count = count + 1;
           });
+        }
+
+        function generate_list(){
+          //remove the list already in the ul
+          $('.list').html('');
+          //loop through all the tags to build the list
+          $.each(points['tags'], function( i, tag ){
+            $('.list').append('<li class="'+ i +'"><a class="list-item">' + tag.unit + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
+          });
+
         }
     });
 
