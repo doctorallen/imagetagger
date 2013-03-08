@@ -91,17 +91,19 @@ $(document).on('ready', function(){
   $(document).on('mouseenter', '.tag', function(){
       $('.tag').removeClass('active');
       $(this).addClass('active');
+      $(this).append('<div class="tag-close">X</div>');
       cur_tag = $(this).attr('id');
       console.log(cur_tag);
   });
 
-  $(document).on('mouseout', '.tag', function(){
+  $(document).on('mouseleave', '.tag', function(){
       $('.tag').removeClass('active');
+      $('.tag-close').remove();
       cur_tag = "";
       console.log(cur_tag);
   });
 
-  $(document).on('mouseout', '.list-item', function(){
+  $(document).on('mouseleave', '.list-item', function(){
       $('.tag').removeClass('active');
       $(this).parent().find('ul').hide();
   });
@@ -115,15 +117,18 @@ $(document).on('ready', function(){
     $('.tag').removeClass('tag-done');
     done = false;
   });
+   
+  $(document).on('click', '.tag-close', function(){
+    deleteTag( $(this).parent().attr('id') );
+  });
 
   $(document).keyup( function(e){
     console.log(e.keyCode);
     console.log(cur_tag);
-    if (e.keyCode == 68 && cur_tag != ""){
+    if ((e.keyCode == 68 && cur_tag != "") || (e.keyCode == 46 && cur_tag != "")){
       deleteTag( cur_tag );
       cur_tag = "";
     }
-    
   });
 
   function deleteTag( id ){

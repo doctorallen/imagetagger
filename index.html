@@ -29,12 +29,35 @@
 .tag-done{
   pointer-events: all;
   border: none;
+  text-align: right;
+}
+.tag-close{
+  cursor: pointer;
+  font-family: 'Arial';
+  text-align: center;
+  vertical-align: middle;
+  color: #FFF;
+  top: 2px; 
+  right: 2px; 
+  width: 18px;
+  height: 18px;
+  text-shadow: 0 2px rgba(0,0,0,0.5);
+  position: absolute;
+  padding: 2px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(0,0,0,0.2);
+}
+.tag-close:hover{
+  background: rgba(255,255,255,0.4);
 }
 .list-item{
   cursor: pointer;
 }
+.tag:hover{
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
 .active{
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+   box-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
 .sub-item{
   display: none;
