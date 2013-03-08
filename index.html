@@ -19,15 +19,16 @@
   }
 .units {
 }
-.box{
+.tag{
       border: 2px solid rgba(255,255,255,0.5); 
       position: absolute;
       pointer-events: none;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
-.box-done{
+.tag-done{
   pointer-events: all;
+  border: none;
 }
 .list-item{
   cursor: pointer;
@@ -41,10 +42,11 @@
   </style>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script type="text/javascript" src="tagger.js"></script>
+  <script type="text/javascript" src="generator.js"></script>
 </head>
 <body>
-<textarea id="points"></textarea>
 <button class="done-btn">Done</button>
+<button class="generate-btn">Generate</button>
 <span>Add new tag</span><br />
 <select class="units">
   <option>Helicopter</option>

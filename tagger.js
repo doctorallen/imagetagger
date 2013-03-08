@@ -1,5 +1,12 @@
 $(document).on('ready', function(){
   var points = {};
+  points['image'] = {
+    src: $('.canvas img').attr('src'),
+    description: "Image Description",
+    game: "Generals 2",
+    date: new Date()
+  };
+  points['tags'] = {};
   var downX = 0;
   var downY = 0;
   var upX = 0;
@@ -9,15 +16,15 @@ $(document).on('ready', function(){
     if( downX != 0 && downY != 0){
       upX = e.pageX - $(this).offset().left;
       upY= e.pageY - $(this).offset().top;
-      var box = $('#cur_box_' + count);
+      var tag = $('#tag_' + count);
       if( upX < downX  ){
-        box.css('left', upX);
+        tag.css('left', upX);
       }
       if( upY < downY ){
-        box.css('top', upY);
+        tag.css('top', upY);
       }
-      box.css('height', Math.abs(downY - upY));
-      box.css('width', Math.abs(downX - upX));
+      tag.css('height', Math.abs(downY - upY));
+      tag.css('width', Math.abs(downX - upX));
     }
   });
   $('.canvas img').mousedown(function(e){
@@ -25,20 +32,19 @@ $(document).on('ready', function(){
       downX = e.pageX - $(this).offset().left;
       downY= e.pageY - $(this).offset().top;
       var style = "top:" + downY + "px; left:" + downX + "px; z-index:" + count + ";";
-      $('.canvas').append('<div id ="cur_box_' + count + '" class="box ' + $('.units').val() + '" style="' + style +'"></div>');
+      $('.canvas').append('<div id ="tag_' + count + '" class="tag ' + $('.units').val() + '" style="' + style +'"></div>');
   });
   $('.canvas img').mouseup(function(e){
-      console.log(count);
       e.preventDefault();
-      var boxID = 'cur_box_' + count;
+      var tagID = 'tag_' + count;
       var unitType = $('.units').val();
-      //if the user drew the box from right to left, swap the coordinates
+      //if the user drew the tag from right to left, swap the coordinates
       if( upX < downX ){
         var temp = downX;
         downX = upX;
         upX = temp;
       }
-      //if the user drew the box from bottom to top, swap the coordinates
+      //if the user drew the tag from bottom to top, swap the coordinates
       if( upY < downY ){
         var temp = downY;
         downY = upY;
@@ -51,58 +57,54 @@ $(document).on('ready', function(){
         upY: upY,
         unit: unitType
       };
-      points[boxID] = point;
+      points['tags'][tagID] = point;
+      console.log('points');
       console.log(points);
-      $('#points').val(points);
+      console.log(JSON.stringify(points));
       generate_background();
-      $('.list').append('<li class="'+ boxID +'"><a class="list-item">' + unitType + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
+      $('.list').append('<li class="'+ tagID +'"><a class="list-item">' + unitType + '</a><ul class="sub-item"><li>Description:</li><li>asdf</li></ul></li>'); 
 
         
       count = count + 1;
   });
   $(document).on('mouseenter', '.list-item', function(){
-      $('.box').removeClass('active');
+      $('.tag').removeClass('active');
       $('#' + $(this).parent().attr('class')).addClass('active');
-      console.log($(this));
       $(this).parent().find('ul').show();
   });
-  $(document).on('mouseenter', '.box', function(){
-      $('.box').removeClass('active');
+  $(document).on('mouseenter', '.tag', function(){
+      $('.tag').removeClass('active');
       $(this).addClass('active');
   });
-  $(document).on('mouseout', '.box', function(){
-      $('.box').removeClass('active');
+  $(document).on('mouseout', '.tag', function(){
+      $('.tag').removeClass('active');
   });
   $(document).on('mouseout', '.list-item', function(){
-      $('.box').removeClass('active');
+      $('.tag').removeClass('active');
       $(this).parent().find('ul').hide();
   });
   $('.done-btn').click( function (){
-    $('.box').addClass('box-done');
+    $('.tag').addClass('tag-done');
       });
  function generate_background(){
-    //$('.box').hide();
+    //$('.tag').hide();
     var units = $('.units');
     $('.' + units.val()).each(function(){
-        var box = $(this);
-        box.show();
-        var point = points[box.attr('id')];
-        var url = 'url(generals2.jpg) no-repeat -' + point.downX + 'px -' + point.downY + 'px';
-        console.log(box);
-        console.log(url);
-        box.css({background: url, border: 'none'});
+        var tag = $(this);
+        tag.show();
+        var point = points['tags'][tag.attr('id')];
+        var url = 'url(' + $('.canvas img').attr('src') + ') no-repeat -' + point.downX + 'px -' + point.downY + 'px';
+        tag.css({background: url, border: 'none'});
       });
  }
   $(document).on('click', '.units', function() {
-        $('.box').hide();
+        $('.tag').hide();
     $('.' + $(this).val()).each(function(){
-        var box = $(this);
-        box.show();
-        var point = points[box.attr('id')];
-        var url = 'url(generals2.jpg) no-repeat -' + point.downX + 'px -' + point.downY + 'px';
-        console.log(box);
-        console.log(url);
-        box.css({background: url});
+        var tag = $(this);
+        tag.show();
+        var point = points['tags'][tag.attr('id')];
+        var url = 'url(' + $('.canvas img').attr('src') + ') no-repeat -' + point.downX + 'px -' + point.downY + 'px';
+        tag.css({background: url});
       });
   });
 
