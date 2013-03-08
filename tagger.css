@@ -56,7 +56,8 @@ body{
 .sub-item{
   display: none;
 }
-.edit-menu{
+.menu
+{
   border: 2px solid rgba(255,255,255,0.5);
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -66,6 +67,13 @@ body{
   list-style-type: none;
   width: 150px;
   padding: 5px;
+}
+
+.edit-menu{
+}
+
+.menu li{
+  cursor: pointer;
 }
 .edit-menu li{
   cursor: pointer;

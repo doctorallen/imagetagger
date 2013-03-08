@@ -34,7 +34,7 @@ $(document).on('ready', function(){
     description: "Add Description",
     category: "Change Category"
   };
-  var edit_menu = generate_menu( menu );
+  var edit_menu = generate_menu( menu, 'edit-menu' );
   generate_categories();
   console.log(edit_menu);
 
@@ -189,10 +189,20 @@ $(document).on('ready', function(){
           console.log(points);
         break;
         case "category":
+          var cat_menu = generate_menu( categories, 'category-menu' );
+          $(this).parent().after(cat_menu);
         break;
         default:
       }
   });
+   $(document).on('click', '.category-menu li', function(){
+      var category = $(this).attr('id');
+      var tagID = $(this).parent().parent().attr('id');
+      points['tags'][tagID].category = category;
+      console.log(points);
+      console.log($(this).parent());
+      $(this).parent().remove();
+    });
 
 /*******************************************
  *         Tag Generating Functions
@@ -256,9 +266,9 @@ $(document).on('ready', function(){
     count = iterator;
   }
 
-  function generate_menu( menu ){
+  function generate_menu( menu, menu_class ){
     var menu_items;
-    menu_items ='<ul class="edit-menu">';
+    menu_items ='<ul class="menu ' + menu_class + '">';
     $.each(menu, function( i, item){
          menu_items += "<li id="+ i + ">" + item + "</li>"; 
     });
