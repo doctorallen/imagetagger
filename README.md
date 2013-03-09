@@ -1,21 +1,21 @@
 jQuery Image Tagger
 =============
+A jQuery Image tagger with category support.
 
-Markups
--------
+Demo
+-----------
+Visit `http://dev.davidrallen.com/drawing/tag.html` to test the tagging application.
 
+Visit `http://dev.davidrllen.com/drawing/generate.html` to test the tagging generator.
 
 Installation
 -----------
-
+Clone the repository and copy the neccesary files into your project directory.
 
 
 Usage
 -----
-
-Add tagger.js to the page you want to run the tagging system on
-Add generator.js to the page you want to display the tags on
-
+Create a div with the class "canvas" and put an image in it.
 
 
 Contributing
