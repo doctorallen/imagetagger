@@ -58,8 +58,7 @@ body{
 }
 .menu
 {
-  border: 2px solid rgba(255,255,255,0.5);
-  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
   background: rgba(0,0,0,0.4);
   text-shadow: 0 2px rgba(0,0,0,0.5);
@@ -67,6 +66,12 @@ body{
   list-style-type: none;
   width: 150px;
   padding: 5px;
+}
+ul{
+  -webkit-margin-before: 0px; 
+  -webkit-margin-after: 0px; 
+  -webkit-margin-start: 0px; 
+  -webkit-margin-end: 0px; 
 }
 
 .edit-menu{

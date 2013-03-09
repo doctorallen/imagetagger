@@ -161,13 +161,13 @@ $(document).on('ready', function(){
    
   //check if the user is trying to delete a tag with the close button
   $(document).on('click', '.tag-close', function(){
-    deleteTag( $(this).parent().attr('id') );
+    delete_tag( $(this).parent().attr('id') );
   });
 
   //check if the user is trying to delete a tag with the keyboard
   $(document).keyup( function(e){
     if ((e.keyCode == 68 && cur_tag != "") || (e.keyCode == 46 && cur_tag != "")){
-      deleteTag( cur_tag );
+      delete_tag( cur_tag );
       cur_tag = "";
     }
   });
@@ -202,6 +202,7 @@ $(document).on('ready', function(){
       console.log(points);
       console.log($(this).parent());
       $(this).parent().remove();
+      remove_menu();
     });
 
 /*******************************************
@@ -241,7 +242,7 @@ $(document).on('ready', function(){
  *         Tag Editing/Deletion Functions
  *******************************************/
 
-  function deleteTag( id ){
+  function delete_tag( id ){
     //remove the points from the object
     delete points['tags'][id];
     //remove the actual element
@@ -286,7 +287,7 @@ $(document).on('ready', function(){
   }
 
   function remove_menu(){
-    $('.edit-menu').remove();
+    $('.menu').remove();
   }
 
   function generate_categories(){
