@@ -174,7 +174,7 @@ $(document).on('ready', function(){
 
   //display tags associated with a category
   $(document).on('click', '.category', function() {
-      display_categories( $(this).val() );
+      display_category( $(this).val() );
   });
   
   $(document).on('click', '.edit-menu li', function() {
@@ -249,6 +249,7 @@ $(document).on('ready', function(){
     compact_tags();
     regenerate_tags();
     generate_list();
+    display_category( $('.category').val() );
   }
 
   function compact_tags(){
@@ -299,7 +300,7 @@ $(document).on('ready', function(){
  *        Tag Displaying Functions 
  *******************************************/
 
- function display_categories( category ){
+ function display_category( category ){
    //hide all of the tags
     $('.tag').hide();
    //show only the category we want to see
